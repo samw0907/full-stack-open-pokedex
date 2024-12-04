@@ -7,12 +7,12 @@ module.exports = defineConfig({
   reporter: 'list',
   use: {
     headless: true,
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
   },
   webServer: {
     command: 'npm start',
-    port: 3000,
+    port: 8080,
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
   },
