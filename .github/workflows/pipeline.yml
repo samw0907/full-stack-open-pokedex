@@ -29,7 +29,8 @@ jobs:
       - name: Install Flyctl
         run: |
           curl -L https://fly.io/install.sh | sh
-          export PATH="$HOME/.fly/bin:$PATH"
+          echo "FLYCTL_INSTALL=$HOME/.fly" >> $GITHUB_ENV
+          echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_ENV
       - name: Deploy App
         run: flyctl deploy --remote-only
         env:
