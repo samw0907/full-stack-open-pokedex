@@ -3,21 +3,18 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
+# fly.toml app configuration file
+
 app = 'full-stack-open-pokedex-falling-leaf-3940'
 primary_region = 'arn'
 
 [build]
 
-[[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
-
 [env]
-  PORT = "3000" # add this where PORT matches the internal_port below
+  PORT = "3000" # ensure PORT matches internal_port below
 
 [processes]
-  app = "node app.js" # add this
+  app = "node app.js" # define the process to run your app
 
 [http_service]
   internal_port = 3000
@@ -25,25 +22,25 @@ primary_region = 'arn'
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
-  processes = ["app"]
+  processes = ["app"] # link the service to the app process
 
-  [[services]]
-    internal_port = 3000
-    protocol = "tcp"
-    [[services.http_checks]]
-      interval = 10000
-      timeout = 2000
-      method = "GET"
-      path = "/health"
-      protocol = "http"
-      tls_skip_verify = false
-      success_status = 200
-      failure_threshold = 2
+[[services]]
+  protocol = "tcp"
+  internal_port = 3000
 
-      [[services.ports]]
-        port = 80
-        handlers = ["http"]
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
 
+  [[services.http_checks]]
+    interval = 10000
+    timeout = 2000
+    method = "GET"
+    path = "/health"
+    protocol = "http"
+    tls_skip_verify = false
+    success_status = 200
+    failure_threshold = 2
 
 [deploy]
-  strategy = "canary" 
+  strategy = "canary"
