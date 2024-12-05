@@ -40,6 +40,10 @@ primary_region = 'arn'
       success_status = 200
       failure_threshold = 2
 
+      [[services.ports]]
+        port = 80
+        handlers = ["http"]
+
 
 [deploy]
   strategy = "canary" 
