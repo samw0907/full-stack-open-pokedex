@@ -37,6 +37,7 @@ jobs:
           echo "FLYCTL_INSTALL=$HOME/.fly" >> $GITHUB_ENV
           echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_ENV
       - name: Deploy App
+        if: ${{ github.event_name == 'push' }}
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
