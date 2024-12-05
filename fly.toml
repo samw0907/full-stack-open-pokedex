@@ -17,6 +17,7 @@ primary_region = "arn"
 [[services]]
   internal_port = 3000
   protocol = "tcp"
+  processes = ["app"]
 
   [[services.ports]]
     port = 80
