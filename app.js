@@ -16,7 +16,7 @@ app.get('/version', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-  // Simulate a failure
-  throw new Error('Health check failed');
-  res.send('ok');
-});
+  // eslint-disable-next-line no-constant-condition
+  if (true) throw('error...  ')
+  res.send('ok')
+})
