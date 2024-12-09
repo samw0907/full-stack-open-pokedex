@@ -51,6 +51,25 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
+      - name: Notify Success to Discord
+        if: ${{ success() }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{
+                "embeds": [
+                  {
+                    "title": "A new version of Pokedex deployed",
+                    "url": "https://pdex.fly.dev/",
+                    "description": "Deployed by '${{ github.actor }}'",
+                    "color": 3066993,
+                    "footer": {
+                      "text": "Severity: Informational"
+                    }
+                  }
+                ]
+              }' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
+
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
@@ -70,4 +89,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: "patch"
-      
+
+  failure_notification:
+    if: ${{ failure() }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Notify Failure to Discord
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{
+                "embeds": [
+                  {
+                    "title": "Build failed",
+                    "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
+                    "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by '${{ github.actor }}' broke the build :(",
+                    "color": 15158332,
+                    "footer": {
+                      "text": "Severity: Error"
+                    }
+                  }
+                ]
+              }' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
+          
