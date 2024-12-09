@@ -92,6 +92,5 @@ jobs:
           username: GitHub Actions
           avatarUrl: https://github.githubassets.com/images/modules/logos_page/Octocat.png
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          text: |
-            Deployment failed for commit ${{ github.sha }} on branch ${{ github.ref_name }}.
-            Error details: ${{ job.status }}.
+          text: "Deployment failed."
+          
