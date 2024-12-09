@@ -58,7 +58,7 @@ jobs:
           -d '{
                 "embeds": [
                   {
-                    "username": "Relaxed_Manatee",
+                    "text": "Build deployed"
                     "title": "A new version of Pokedex deployed",
                     "url": "https://pdex.fly.dev/",
                     "description": "Deployed by '${{ github.actor }}'",
@@ -101,7 +101,7 @@ jobs:
           -d '{
                 "embeds": [
                   {
-                    "username": "Relaxed_Manatee",
+                    "text": "Build failed"
                     "title": "Build failed",
                     "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
                     "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by '${{ github.actor }}' broke the build :(",
@@ -113,3 +113,4 @@ jobs:
                 ]
               }' \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
+    
