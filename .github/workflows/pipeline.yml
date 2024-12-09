@@ -21,23 +21,43 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
       - name: Check style
         run: npm run eslint -- --fix
+
       - name: Run Jest tests
         run: npm test
+
       - name: Build application
         run: npm run build
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
         run: npm run test:e2e
+
       - name: Install Flyctl
         run: |
           curl -L https://fly.io/install.sh | sh
           echo "FLYCTL_INSTALL=$HOME/.fly" >> $GITHUB_ENV
           echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_ENV
+
       - name: Deploy App
         if: ${{ github.event_name == 'push' }}
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  tag_release:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' }}
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: "patch"
