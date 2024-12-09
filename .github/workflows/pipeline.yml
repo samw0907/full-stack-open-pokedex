@@ -53,10 +53,9 @@ jobs:
 
       - name: Notify Success to Discord
         if: ${{ success() }}
-        uses: rjstone/discord-webhook-notify@v1.0.4
+        uses: rjstone/discord-webhook-notify@v1
         with:
-          severity: informational
-          username: GitHub Actions
+          severity: info
           avatarUrl: https://github.githubassets.com/images/modules/logos_page/Octocat.png
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           text: "A new version of Pokedex was successfully deployed."
@@ -86,11 +85,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Notify Failure to Discord
-        uses: rjstone/discord-webhook-notify@v1.0.4
+        uses: rjstone/discord-webhook-notify@v1
         with:
           severity: error
-          username: GitHub Actions
           avatarUrl: https://github.githubassets.com/images/modules/logos_page/Octocat.png
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           text: "Deployment failed."
-          
+
