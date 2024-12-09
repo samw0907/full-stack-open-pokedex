@@ -55,7 +55,19 @@ jobs:
         if: ${{ success() }}
         run: |
           curl -X POST -H "Content-Type: application/json" \
-          -d '{"content": "A new version of Pokedex was successfully deployed."}' \
+          -d '{
+                "embeds": [
+                  {
+                    "title": "A new version of Pokedex deployed",
+                    "url": "https://pdex.fly.dev/",
+                    "description": "Deployed by '${{ github.actor }}'",
+                    "color": 3066993,
+                    "footer": {
+                      "text": "Severity: Informational"
+                    }
+                  }
+                ]
+              }' \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
 
   tag_release:
@@ -85,6 +97,18 @@ jobs:
       - name: Notify Failure to Discord
         run: |
           curl -X POST -H "Content-Type: application/json" \
-          -d '{"content": "Deployment failed for commit ${{ github.sha }}."}' \
+          -d '{
+                "embeds": [
+                  {
+                    "title": "Build failed",
+                    "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
+                    "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by '${{ github.actor }}' broke the build :(",
+                    "color": 15158332,
+                    "footer": {
+                      "text": "Severity: Error"
+                    }
+                  }
+                ]
+              }' \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
-
+          
