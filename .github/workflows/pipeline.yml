@@ -53,7 +53,7 @@ jobs:
 
       - name: Notify Success to Discord
         if: success()
-        uses: Ilshidur/action-discord@v2
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
@@ -61,7 +61,7 @@ jobs:
 
       - name: Notify Failure to Discord
         if: failure()
-        uses: Ilshidur/action-discord@v2
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
@@ -79,3 +79,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: "patch"
+          
