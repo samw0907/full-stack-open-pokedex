@@ -13,7 +13,7 @@ jobs:
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v4
         with:
-          url: https://invalid-url.example.com
+          url: https://pdex.fly.dev/
           max-attempts: 3
           retry-delay: 5s
 
@@ -25,7 +25,7 @@ jobs:
         with:
           args: |
             **Periodic Health Check Successful**
-            - Application is running as expected at [https://pdex.fly.dev/](https://pdex.fly.dev/)
+            - Application is running as expected at (https://pdex.fly.dev/)
             - **Severity:** :green_circle: Informational
 
       - name: Notify Failure to Discord
@@ -36,6 +36,5 @@ jobs:
         with:
           args: |
             **Periodic Health Check Failed**
-            - The application at [https://pdex.fly.dev/](https://pdex.fly.dev/) is not responding or returned an error.
+            - The application at (https://pdex.fly.dev/) is not responding or returned an error.
             - **Severity:** :red_circle: Error
-            
