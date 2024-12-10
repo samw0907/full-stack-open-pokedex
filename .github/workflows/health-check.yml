@@ -13,7 +13,7 @@ jobs:
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v4
         with:
-          url: https://pdex.fly.dev/
+          url: https://invalid-url.example.com
           max-attempts: 3
           retry-delay: 5s
 
@@ -38,3 +38,4 @@ jobs:
             **Periodic Health Check Failed**
             - The application at [https://pdex.fly.dev/](https://pdex.fly.dev/) is not responding or returned an error.
             - **Severity:** :red_circle: Error
+            
