@@ -59,8 +59,8 @@ jobs:
         with:
           args: |
               **A new version of Pokedex deployed**
-              - to (https://pdex.fly.dev/) by: **${{ github.actor }}**
-              - **Severity:** :green_circle: Informational
+              - to (https://pdex.fly.dev/) by: ${{ github.actor }}
+              - Severity: :green_circle: Informational
   
       - name: Notify Failure to Discord
         if: failure()
@@ -70,8 +70,8 @@ jobs:
         with:
           args: |
             **Build failed**
-            - commit (https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by **${{ github.actor }}** broke the build :(
-            - **Severity:** :red_circle: Error
+            - commit (https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by ${{ github.actor }} broke the build :(
+            - Severity: :red_circle: Error
   
   tag_release:
     needs: [simple_deployment_pipeline]
