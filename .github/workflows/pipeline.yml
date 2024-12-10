@@ -57,10 +57,7 @@ jobs:
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           severity: info
-          details: |
-            **Deployment succeeded!**
-            - Deployed by: ${{ github.actor }}
-            - [View Deployment](https://pdex.fly.dev/)
+          details: deployment successfull!
 
       - name: Notify Failure to Discord
         if: ${{ failure() }}
@@ -68,10 +65,7 @@ jobs:
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           severity: error
-          details: |
-            **Deployment failed!**
-            - Commit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-            - Author: ${{ github.actor }}
+          details: deployment failed!
 
   tag_release:
     needs: [simple_deployment_pipeline]
@@ -85,4 +79,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: "patch"
-          
