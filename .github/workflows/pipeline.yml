@@ -58,9 +58,8 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
           args: |
-              **A new version of Pokedex deployed!**
-              - [View Deployment](https://pdex.fly.dev/)
-              - Deployed by: **${{ github.actor }}**
+              **A new version of Pokedex deployed**
+              - to (https://pdex.fly.dev/) by: **${{ github.actor }}**
               - **Severity:** :green_circle: Informational
   
       - name: Notify Failure to Discord
@@ -70,11 +69,9 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
           args: |
-            **Build failed!**
-            - Commit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-            - Author: **${{ github.actor }}**
+            **Build failed**
+            - commit (https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by **${{ github.actor }}** broke the build :(
             - **Severity:** :red_circle: Error
-            - :warning: **Please review the logs and fix the issue.**
   
   tag_release:
     needs: [simple_deployment_pipeline]
@@ -88,4 +85,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: "patch"
-      
+    
