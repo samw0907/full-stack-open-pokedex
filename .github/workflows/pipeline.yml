@@ -51,46 +51,27 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-      - name: Debug Webhook
-        run: echo ${{ secrets.DISCORD_WEBHOOK_URL }}
-        
       - name: Notify Success to Discord
         if: ${{ success() }}
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-          -d '{
-                "embeds": [
-                  {
-                    "content": "Build deployed"
-                    "title": "A new version of Pokedex deployed",
-                    "url": "https://pdex.fly.dev/",
-                    "description": "Deployed by '${{ github.actor }}'",
-                    "color": 3066993,
-                    "footer": {
-                      "text": "Severity: Informational"
-                    }
-                  }
-                ]
-              }' \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
-        
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          severity: info
+          details: |
+            **Deployment succeeded!**
+            - Deployed by: ${{ github.actor }}
+            - [View Deployment](https://pdex.fly.dev/)
+
       - name: Notify Failure to Discord
         if: ${{ failure() }}
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-          -d '{
-                "embeds": [
-                  {
-                    "content": "Build or Deployment Failed"
-                    "title": "Build or Deployment Failed",
-                    "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
-                    "description": "Commit by '${{ github.actor }}' caused the failure. [View Commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})",
-                    "color": 15158332,
-                    "footer": { "text": "Severity: Error" }
-                  }
-                ]
-              }' \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          severity: error
+          details: |
+            **Deployment failed!**
+            - Commit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            - Author: ${{ github.actor }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
