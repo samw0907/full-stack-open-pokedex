@@ -61,7 +61,7 @@ jobs:
           -d '{
                 "embeds": [
                   {
-                    "text": "Build deployed"
+                    "content": "Build deployed"
                     "title": "A new version of Pokedex deployed",
                     "url": "https://pdex.fly.dev/",
                     "description": "Deployed by '${{ github.actor }}'",
@@ -81,6 +81,7 @@ jobs:
           -d '{
                 "embeds": [
                   {
+                    "content": "Build or Deployment Failed"
                     "title": "Build or Deployment Failed",
                     "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
                     "description": "Commit by '${{ github.actor }}' caused the failure. [View Commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})",
