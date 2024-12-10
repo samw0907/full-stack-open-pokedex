@@ -51,47 +51,31 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-      - name: Debug Webhook
-        run: echo ${{ secrets.DISCORD_WEBHOOK_URL }}
-        
       - name: Notify Success to Discord
-        if: ${{ success() }}
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-          -d '{
-                "embeds": [
-                  {
-                    "content": "Build deployed"
-                    "title": "A new version of Pokedex deployed",
-                    "url": "https://pdex.fly.dev/",
-                    "description": "Deployed by '${{ github.actor }}'",
-                    "color": 3066993,
-                    "footer": {
-                      "text": "Severity: Informational"
-                    }
-                  }
-                ]
-              }' \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
-        
+        if: success()
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          args: |
+              **A new version of Pokedex deployed!**
+              - [View Deployment](https://pdex.fly.dev/)
+              - Deployed by: **${{ github.actor }}**
+              - **Severity:** :green_circle: Informational
+  
       - name: Notify Failure to Discord
-        if: ${{ failure() }}
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-          -d '{
-                "embeds": [
-                  {
-                    "content": "Build or Deployment Failed"
-                    "title": "Build or Deployment Failed",
-                    "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
-                    "description": "Commit by '${{ github.actor }}' caused the failure. [View Commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})",
-                    "color": 15158332,
-                    "footer": { "text": "Severity: Error" }
-                  }
-                ]
-              }' \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
-
+        if: failure()
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          args: |
+            **Build failed!**
+            - Commit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            - Author: **${{ github.actor }}**
+            - **Severity:** :red_circle: Error
+            - :warning: **Please review the logs and fix the issue.**
+  
   tag_release:
     needs: [simple_deployment_pipeline]
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
@@ -104,3 +88,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: "patch"
+      
