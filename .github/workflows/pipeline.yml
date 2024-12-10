@@ -57,16 +57,25 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
-          args: "**Deployment succeeded!**\nDeployed by: ${{ github.actor }}\n[View Deployment](https://pdex.fly.dev/)"
-
+          args: |
+              **A new version of Pokedex deployed!**
+              - [View Deployment](https://pdex.fly.dev/)
+              - Deployed by: **${{ github.actor }}**
+              - **Severity:** :green_circle: Informational
+  
       - name: Notify Failure to Discord
         if: failure()
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
-          args: "**Deployment failed!**\nCommit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})\nAuthor: ${{ github.actor }}"
-
+          args: |
+            **Build failed!**
+            - Commit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            - Author: **${{ github.actor }}**
+            - **Severity:** :red_circle: Error
+            - :warning: **Please review the logs and fix the issue.**
+  
   tag_release:
     needs: [simple_deployment_pipeline]
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
@@ -79,4 +88,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: "patch"
-        
+      
