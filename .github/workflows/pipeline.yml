@@ -51,28 +51,21 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-      - name: Debug Discord Webhook
-        run: |
-          curl -v -X POST -H "Content-Type: application/json" \
-          -d '{"content": "Test message"}' \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
-     
-
       - name: Notify Success to Discord
-        uses: rjstone/discord-webhook-notify@v1
         if: success()
+        uses: Ilshidur/action-discord@v2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
-          severity: info
-          details: deployment sucessfull
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          args: "**Deployment succeeded!**\nDeployed by: ${{ github.actor }}\n[View Deployment](https://pdex.fly.dev/)"
 
       - name: Notify Failure to Discord
-        uses: rjstone/discord-webhook-notify@v1
         if: failure()
+        uses: Ilshidur/action-discord@v2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
-          severity: error
-          details: deployment failed
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          args: "**Deployment failed!**\nCommit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})\nAuthor: ${{ github.actor }}"
 
   tag_release:
     needs: [simple_deployment_pipeline]
@@ -86,4 +79,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: "patch"
-          
