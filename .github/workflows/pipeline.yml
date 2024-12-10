@@ -52,20 +52,20 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
       - name: Notify Success to Discord
-        if: ${{ success() }}
         uses: rjstone/discord-webhook-notify@v1
+        if: success()
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           severity: info
-          details: deployment successfull!
+          details: deployment sucessfull
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notify Failure to Discord
-        if: ${{ failure() }}
         uses: rjstone/discord-webhook-notify@v1
+        if: failure()
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           severity: error
-          details: deployment failed!
+          details: deployment failed
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
