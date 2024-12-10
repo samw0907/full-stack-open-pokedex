@@ -1,0 +1,40 @@
+name: Periodic Health Check
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  health_check:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v4
+        with:
+          url: https://pdex.fly.dev/
+          max-attempts: 3
+          retry-delay: 5s
+
+      - name: Notify Success to Discord
+        if: ${{ success() }}
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          args: |
+            **Periodic Health Check Successful**
+            - Application is running as expected at [https://pdex.fly.dev/](https://pdex.fly.dev/)
+            - **Severity:** :green_circle: Informational
+
+      - name: Notify Failure to Discord
+        if: ${{ failure() }}
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          args: |
+            **Periodic Health Check Failed**
+            - The application at [https://pdex.fly.dev/](https://pdex.fly.dev/) is not responding or returned an error.
+            - **Severity:** :red_circle: Error
