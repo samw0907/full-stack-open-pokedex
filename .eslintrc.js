@@ -49,7 +49,7 @@ module.exports = {
     "arrow-spacing": [
       "error", { "before": true, "after": true }
     ],
-    "no-console": "warn",
+    "no-console": [ "warn", { allow: ["warn", "error", "info"]}],
     "react/prop-types": 0
   },
   "settings": {
