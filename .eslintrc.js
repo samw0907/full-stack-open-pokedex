@@ -29,8 +29,6 @@ module.exports = {
       "error",
         2
       ],
-      "no-console": [
-        "error", { "allow": ["warn", "error", "info"] }],
     "linebreak-style": [
       "error",
       "unix"
@@ -51,7 +49,7 @@ module.exports = {
     "arrow-spacing": [
       "error", { "before": true, "after": true }
     ],
-    "no-console": "warn",
+    "no-console": [ "warn", { allow: ["warn", "error", "info"]}],
     "react/prop-types": 0
   },
   "settings": {
