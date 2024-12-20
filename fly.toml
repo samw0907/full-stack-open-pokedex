@@ -35,4 +35,3 @@ primary_region = "arn"
 
 [deploy]
   strategy = "canary"
-  
